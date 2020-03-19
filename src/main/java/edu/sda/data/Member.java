@@ -1,11 +1,10 @@
 package edu.sda.data;
 
-import java.util.Objects;
-
 public class Member {
     private String name;
     private String id;
-    private boolean isAttend;
+    private double attendanceRate = 0;
+    private int attendanceDays = 0;
 
     public String getName() {
         return name;
@@ -23,12 +22,20 @@ public class Member {
         this.id = id;
     }
 
-    public boolean isAttend() {
-        return isAttend;
+    public double getAttendanceRate() {
+        return attendanceRate;
     }
 
-    public void setAttend(boolean attend) {
-        isAttend = attend;
+    public void setAttendanceRate(double attendanceRate) {
+        this.attendanceRate = attendanceRate;
+    }
+
+    public int getAttendanceDays() {
+        return attendanceDays;
+    }
+
+    public void setAttendanceDays(int attendanceDays) {
+        this.attendanceDays = attendanceDays;
     }
 
     public Member(String name, String id) {

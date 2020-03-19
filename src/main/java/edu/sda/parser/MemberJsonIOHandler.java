@@ -7,7 +7,7 @@ import edu.sda.data.Member;
 import java.io.File;
 import java.io.IOException;
 
-public class MemberJsonFileHandler {
+public class MemberJsonIOHandler {
 
     public Member[] readValues() {
         Member[] membersList = null;

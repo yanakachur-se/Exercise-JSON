@@ -1,44 +1,44 @@
 package edu.sda.service;
 
 import edu.sda.data.Member;
-import edu.sda.parser.MemberAttendanceInput;
-import edu.sda.parser.MemberJsonReader;
-
-import java.sql.SQLOutput;
-import java.util.Arrays;
+import edu.sda.parser.MemberJsonIOHandler;
 
 public class MemberService {
 
     Member[] membersList;
+    MemberJsonIOHandler reader = new MemberJsonIOHandler();
 
     public void initMembersList() {
-        MemberJsonReader reader = new MemberJsonReader();
         membersList = reader.readValues();
         checkRepeatableIds();
     }
 
     public void checkRepeatableIds() {
+       if (!ifSomeIdsRepeatable(membersList)) {
+           System.out.println("________________________________________");
+            System.out.println("All member id's in the list are unique \n");
+        }
+    }
+
+    boolean ifSomeIdsRepeatable(Member [] membersList) {
         boolean ifSomeIdsNonUnique = false;
         for (int i = 0; i < membersList.length; i++) {
             for (int j = i + 1; j < membersList.length; j++) {
                 if (areMemberIdIdentical(membersList[i], membersList[j])) {
-                    System.out.println("Users " + membersList[i].getName() + " and " + membersList[j].getName() + " have identical id.");
+                    printNonUniqueIdMessage(membersList[i].getName(), membersList[j].getName());
                     ifSomeIdsNonUnique = true;
                 }
             }
         }
-
-        if (!ifSomeIdsNonUnique){
-            System.out.println("All member id's in the list are unique");
-        }
+        return ifSomeIdsNonUnique;
     }
 
-    private boolean areMemberIdIdentical(Member member, Member nextMember) {
-        if (member.getId().equals(nextMember.getId())) {
-            return true;
-        } else {
-            return false;
-        }
+    private void printNonUniqueIdMessage(String memberName, String secondMemberName) {
+        System.out.println("Users " + memberName + " and " + secondMemberName + " have identical id.");
+    }
+
+    boolean areMemberIdIdentical(Member member, Member nextMember) {
+        return member.getId().equals(nextMember.getId());
     }
 
     public void takeAttendance() {
@@ -46,6 +46,13 @@ public class MemberService {
         for (Member member : membersList) {
             MemberAttendanceInput.fillIfMemberAttend(member);
         }
+    }
 
+    public void saveAttendance() {
+        reader.saveAttendanceListToFile(membersList);
+    }
+
+    public void printAttendanceSheet() {
+        reader.printPrettyAttendanceList(membersList);
     }
 }
